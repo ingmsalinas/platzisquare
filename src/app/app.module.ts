@@ -1,9 +1,11 @@
+import { MyGuard } from './services/my-guard.service';
+import { AutorizacionService } from './services/autorizacion.service';
 import { CrearComponent } from './crear/crear.component';
 import { LugaresService } from './services/lugares.service';
 import { ContactoComponent } from './contacto/contacto.component';
 import { DetalleComponent } from './detalle/detalle.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule, ApplicationRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgmCoreModule } from '@agm/core';
@@ -16,11 +18,13 @@ import { LugaresComponent } from './lugares/lugares.component';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthModule, AngularFireAuth } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HttpClientModule } from '@angular/common/http';
 import { MainPipe } from './main-pipe.module';
+import { LoginComponent } from './login/login.component';
+import { RegistroComponent } from './registro/registro.component';
 
 
 const appRoutes: Routes = [
@@ -28,7 +32,9 @@ const appRoutes: Routes = [
   { path: 'lugares', component: LugaresComponent },
   { path: 'detalle/:id', component: DetalleComponent },
   { path: 'contacto', component: ContactoComponent },
-  { path: 'crear/:id', component: CrearComponent }
+  { path: 'crear/:id', component: CrearComponent, canActivate: [MyGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegistroComponent }
 ];
 
 export const firebaseConfig = {
@@ -47,7 +53,9 @@ export const firebaseConfig = {
     DetalleComponent,
     LugaresComponent,
     ContactoComponent,
-    CrearComponent
+    CrearComponent,
+    LoginComponent,
+    RegistroComponent
   ],
   imports: [
     BrowserModule,
@@ -63,9 +71,10 @@ export const firebaseConfig = {
     AngularFireAuthModule,
     HttpClientModule,
     MainPipe,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
-  providers: [LugaresService, AngularFireDatabase],
+  providers: [LugaresService, AngularFireDatabase, AutorizacionService, AngularFireAuth, MyGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

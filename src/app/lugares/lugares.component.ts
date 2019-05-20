@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LugaresService } from '../services/lugares.service';
-import { trigger, state, style } from '@angular/animations';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 
 @Component({
@@ -10,14 +10,16 @@ import { trigger, state, style } from '@angular/animations';
     trigger('contenedorAnimable', [
       state('inicial', style({
         opacity: 0,
-        backgroundColor: 'green',
-        transform: 'rotate3d(0,0,0,0deg)'
+        // backgroundColor: 'green',
+        // transform: 'rotate3d(0,0,0,0deg)'
       })),
       state('final', style({
         opacity: 1,
-        backgroundColor: 'yellow',
-        transform: 'rotate3d(5,10,20,30deg)'
-      }))
+        // backgroundColor: 'yellow',
+        // transform: 'rotate3d(5,10,20,30deg)'
+      })),
+      transition('inicial => final', animate(2000)),
+      transition('final => inicial', animate(1000))
     ])
   ]
 })
@@ -29,10 +31,24 @@ export class LugaresComponent {
   lng: number = -74.0595918;
   lugares = null;
 
+  // animar() {
+  //   this.state = (this.state == 'final') ? 'inicial' : 'final';
+  // }
+  // animacionInicia(e) {
+  //   console.log('Iniciado!');
+  //   console.log(e);
+  // }
+  // animacionTermina(e) {
+  //   console.log('Terminado!');
+  //   console.log(e);
+  // }
+
+
   constructor(private lugaresService: LugaresService) {
     lugaresService.getLugares().subscribe(lugares => {
       //this.lugares = lugares 
       this.lugares = Object.values(lugares);
+      this.state = 'final';
     }, error => {
       console.log('error');
       alert('Tenemos algo de dificultadoes, disculpe las molestias. Error: ' + error.statusText);
